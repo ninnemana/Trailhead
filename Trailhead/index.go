@@ -9,11 +9,12 @@ import (
 func init(){
     app.Start()
     app.Get("/index",index)
-    app.Get("/request",request)
+    app.Post("/request",request)
+    app.Get("/request",index)
 }
 
 func index(ctx app.Context){
-    ctx.Show("html/index.html")
+    ctx.Show("html/index")
 }
 
 func request(ctx app.Context){
@@ -23,16 +24,17 @@ func request(ctx app.Context){
 		"weiner27",
 		"smtp.gmail.com",
 	)
-	headers := "MIME-Version: 1.0\r\nContent-Type: text/html\r\n"
+	//headers := "MIME-Version: 1.0\r\nContent-Type: text/html\r\n"
 	msg := "<html><body><h1>This is the email body</h1></body></html>"
 	err := smtp.SendMail(
 		"smtp.gmail.com:587",
 		auth,
 		"aninneman@curtmfg.com",
 		[]string{"ninnemana@gmail.com"},
-		[]byte(headers + msg),
+		[]byte(msg),
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
+    ctx.Redirect("/")
 }
